@@ -1,0 +1,20 @@
+.list {
+  display: flex;
+}
+.listItem {
+  margin-right: 10px;
+  display: inline-block;
+  text-align: center;
+  width: 45px;
+  height: 45px;
+  line-height: 43px;
+  border: 1px solid #fe5f1e;
+  border-radius: 30px;
+  cursor: pointer;
+  color: #fe5f1e;
+}
+.active,
+.listItem:hover {
+  background: #fe5f1e;
+  color: #fff;
+}
