@@ -20,9 +20,14 @@ export const filterSlice = createSlice({
     setActivePage(state, action) {
       state.activePage = action.payload;
     },
+    setFilters(state, action) {
+      state.activeCategory = action.payload.activeCategory;
+      state.sortProperty = action.payload.sortProperty;
+      state.activePage = action.payload.activePage;
+    },
   },
 });
 
-export const { setCategory, setSortProperty, setActivePage } = filterSlice.actions;
+export const { setCategory, setSortProperty, setActivePage, setFilters } = filterSlice.actions;
 
 export default filterSlice.reducer;
