@@ -18,6 +18,7 @@ const Pagination = ({ itemCount, pageSize, activePage, setActivePage }) => {
         </li>
         {[...new Array(Math.ceil(itemCount / pageSize))].map((_, i) => (
           <li
+            key={i}
             onClick={() => setActivePage(i + 1)}
             className={`${style.listItem} ${activePage === i + 1 && style.active}`}>
             {i + 1}
