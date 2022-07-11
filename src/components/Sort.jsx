@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { useEffect } from 'react';
 
 export const list = [
   { name: 'популярности', sort: 'rating' },
@@ -8,13 +9,26 @@ export const list = [
 
 const Sort = ({ activeSortProperty, onChangeSortProperty }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const sortRef = useRef();
+
+  useEffect(() => {
+    const onClickWithoutPopup = (e) => {
+      if (!e.path.includes(sortRef.current)) {
+        setIsVisible(false);
+      }
+    };
+    document.body.addEventListener('click', onClickWithoutPopup);
+    return () => {
+      document.body.removeEventListener('click', onClickWithoutPopup);
+    };
+  }, []);
 
   const onClickListItem = (obj) => {
     onChangeSortProperty(obj);
     setIsVisible(false);
   };
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label label">
         <svg
           width="10"
@@ -36,6 +50,7 @@ const Sort = ({ activeSortProperty, onChangeSortProperty }) => {
           <ul>
             {list.map((obj, i) => (
               <li
+                key={i}
                 className={activeSortProperty.sort === obj.sort ? 'active' : ''}
                 onClick={() => onClickListItem(obj)}>
                 {obj.name}

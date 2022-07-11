@@ -118,6 +118,8 @@ body {
   &__clear {
     display: flex;
     align-items: center;
+    background: #fff;
+    border: none;
     cursor: pointer;
     @include noselect();
 
@@ -219,6 +221,8 @@ body {
     }
 
     &-remove {
+      background: none;
+      border: none;
       display: flex;
       align-items: center;
       justify-content: flex-end;

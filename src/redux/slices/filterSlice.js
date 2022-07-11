@@ -21,7 +21,7 @@ export const filterSlice = createSlice({
       state.activePage = action.payload;
     },
     setFilters(state, action) {
-      state.activeCategory = action.payload.activeCategory;
+      state.activeCategory = Number(action.payload.activeCategory);
       state.sortProperty = action.payload.sortProperty;
       state.activePage = action.payload.activePage;
     },

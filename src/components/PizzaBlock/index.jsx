@@ -1,9 +1,26 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { addItem } from '../../redux/slices/cartSlice';
+
+export const typeName = ['тонкое', 'традиционное'];
 
 const PizzaBlock = ({ id, name, price, imageUrl, sizes, types }) => {
-  const typeName = ['тонкое', 'традиционное'];
-  const [activeSize, setActiveSize] = useState(0);
+  const dispatch = useDispatch();
+  const [activeSize, setActiveSize] = useState(sizes[0]);
   const [activeType, setActiveType] = useState(0);
+  const { items } = useSelector((state) => state.cart);
+  let addedCount = 0;
+  items.map((el) => {
+    if (el.id === id) {
+      addedCount += el.count;
+    }
+    return 0;
+  });
+  const onAddToCart = () => {
+    const pizzaObj = { id, name, price, imageUrl, size: activeSize, type: activeType };
+    dispatch(addItem(pizzaObj));
+  };
+
   return (
     <div className="pizza-block-wrapper">
       <div className="pizza-block">
@@ -24,8 +41,8 @@ const PizzaBlock = ({ id, name, price, imageUrl, sizes, types }) => {
             {sizes.map((el, i) => (
               <li
                 key={el + i}
-                className={activeSize === i ? 'active' : ''}
-                onClick={() => setActiveSize(i)}>
+                className={activeSize === el ? 'active' : ''}
+                onClick={() => setActiveSize(el)}>
                 {el}
               </li>
             ))}
@@ -33,7 +50,7 @@ const PizzaBlock = ({ id, name, price, imageUrl, sizes, types }) => {
         </div>
         <div className="pizza-block__bottom">
           <div className="pizza-block__price">от {price} ₽</div>
-          <div className="button button--outline button--add">
+          <button onClick={onAddToCart} className="button button--outline button--add">
             <svg
               width="12"
               height="12"
@@ -46,8 +63,8 @@ const PizzaBlock = ({ id, name, price, imageUrl, sizes, types }) => {
               />
             </svg>
             <span>Добавить</span>
-            <i>2</i>
-          </div>
+            {addedCount > 0 && <i>{addedCount}</i>}
+          </button>
         </div>
       </div>
     </div>
