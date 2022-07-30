@@ -9,12 +9,11 @@ const Search = () => {
 
   const dispatch = useDispatch();
 
-  const updateSearchValue = useCallback(
+  const updateSearchValue = useCallback(() => {
     debounce((str) => {
       dispatch(setSearchText(str));
-    }, 1000),
-    [],
-  );
+    }, 1000);
+  }, [dispatch]);
 
   const clearSearchValue = () => {
     dispatch(setSearchText(''));
@@ -38,7 +37,13 @@ const Search = () => {
           <path d="M13.85,13.15l-2.69-2.69c0.74-0.9,1.2-2.03,1.2-3.28C12.37,4.33,10.04,2,7.18,2S2,4.33,2,7.18s2.33,5.18,5.18,5.18   c1.25,0,2.38-0.46,3.28-1.2l2.69,2.69c0.1,0.1,0.23,0.15,0.35,0.15s0.26-0.05,0.35-0.15C14.05,13.66,14.05,13.34,13.85,13.15z    M3,7.18C3,4.88,4.88,3,7.18,3s4.18,1.88,4.18,4.18s-1.88,4.18-4.18,4.18S3,9.49,3,7.18z" />
         </g>
       </svg>
-      <input value={value} onChange={(e) => onChangeInput(e)} className={style.input} type="text" />
+      <input
+        placeholder="Поиск пиццы..."
+        value={value}
+        onChange={(e) => onChangeInput(e)}
+        className={style.input}
+        type="text"
+      />
       <svg
         className={style.clearIcon}
         onClick={clearSearchValue}
