@@ -1,6 +1,5 @@
-import axios from 'axios';
 import qs from 'qs';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { SearchContext } from '../App';
 import Categories from '../components/Categories';
@@ -15,6 +14,7 @@ import {
   setSortProperty,
 } from '../redux/slices/filterSlice';
 import { useNavigate } from 'react-router-dom';
+import { fetchPizzas } from '../redux/slices/pizzaSlice';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -23,13 +23,14 @@ const Home = () => {
   const isMounted = useRef(false);
 
   const { activeCategory, sortProperty, activePage } = useSelector((state) => state.filter);
+  const { status, items } = useSelector((state) => state.pizza);
+
   const { searchText } = useContext(SearchContext);
-  const [pizzas, setPizzas] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+
   const category = activeCategory ? `&category=${activeCategory}` : '';
   const sort = `sortBy=${sortProperty.sort}`;
 
-  const filteredPizzas = pizzas
+  const filteredPizzas = items
     .filter((pizza) => pizza.name.toLowerCase().includes(searchText.toLowerCase()))
     .map((pizza) => <PizzaBlock key={pizza.id} {...pizza} />);
 
@@ -44,19 +45,11 @@ const Home = () => {
 
   useEffect(() => {
     if (!isSearch.current) {
-      setIsLoading(true);
-      axios
-        .get(
-          `https://62c160f7eff7f7856f0d3c98.mockapi.io/pizzas/pizzas?${sort}${category}&p=${activePage}&l=6`,
-        )
-        .then((res) => {
-          setPizzas(res.data);
-          setIsLoading(false);
-          window.scrollTo(0, 0);
-        });
+      dispatch(fetchPizzas({ sort, category, activePage }));
+      window.scrollTo(0, 0);
     }
     isSearch.current = false;
-  }, [category, sort, activePage]);
+  }, [category, sort, activePage, dispatch]);
 
   useEffect(() => {
     if (isMounted.current) {
@@ -70,6 +63,17 @@ const Home = () => {
     isMounted.current = true;
   }, [activeCategory, sortProperty, activePage, navigate]);
 
+  if (status === 'error') {
+    return (
+      <div className="container">
+        <div className="content__error">
+          <h1>Произошла ошибка 😕</h1>
+          <span>Попробуйте перезагрузить страницу или повторить попытку позже</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container">
       <div className="content__top">
@@ -81,9 +85,11 @@ const Home = () => {
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
-        {isLoading ? [...new Array(6)].map((_, i) => <PizzaSkelet key={i} />) : filteredPizzas}
+        {status === 'loading'
+          ? [...new Array(6)].map((_, i) => <PizzaSkelet key={i} />)
+          : filteredPizzas}
       </div>
-      {!isLoading && (
+      {status === 'success' && (
         <Pagination
           pageSize={6}
           itemCount={10}
