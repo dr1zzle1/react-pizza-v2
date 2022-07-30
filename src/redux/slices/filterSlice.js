@@ -8,11 +8,15 @@ export const filterSlice = createSlice({
       name: 'популярности',
       sort: 'rating',
     },
+    searchText: '',
     activePage: 1,
   },
   reducers: {
     setCategory(state, action) {
       state.activeCategory = action.payload;
+    },
+    setSearchText(state, action) {
+      state.searchText = action.payload;
     },
     setSortProperty(state, action) {
       state.sortProperty = action.payload;
@@ -28,6 +32,7 @@ export const filterSlice = createSlice({
   },
 });
 
-export const { setCategory, setSortProperty, setActivePage, setFilters } = filterSlice.actions;
+export const { setCategory, setSortProperty, setActivePage, setFilters, setSearchText } =
+  filterSlice.actions;
 
 export default filterSlice.reducer;

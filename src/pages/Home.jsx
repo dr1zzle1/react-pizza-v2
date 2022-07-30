@@ -1,7 +1,6 @@
 import qs from 'qs';
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { SearchContext } from '../App';
 import Categories from '../components/Categories';
 import Pagination from '../components/Pagination/Pagination';
 import PizzaBlock from '../components/PizzaBlock';
@@ -22,10 +21,10 @@ const Home = () => {
   const isSearch = useRef(false);
   const isMounted = useRef(false);
 
-  const { activeCategory, sortProperty, activePage } = useSelector((state) => state.filter);
+  const { activeCategory, sortProperty, activePage, searchText } = useSelector(
+    (state) => state.filter,
+  );
   const { status, items } = useSelector((state) => state.pizza);
-
-  const { searchText } = useContext(SearchContext);
 
   const category = activeCategory ? `&category=${activeCategory}` : '';
   const sort = `sortBy=${sortProperty.sort}`;
