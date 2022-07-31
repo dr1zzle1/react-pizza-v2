@@ -18,6 +18,7 @@ const PizzaBlock: React.FC<PropType> = ({ id, name, price, imageUrl, sizes, type
 	const dispatch = useTypedDispatch();
 	const [activeSize, setActiveSize] = useState(sizes[0]);
 	const [activeType, setActiveType] = useState(0);
+	console.log(types);
 	const { items } = useTypedSelector((state) => state.cart);
 	let addedCount = 0;
 	items.map((el: any) => {
@@ -27,7 +28,7 @@ const PizzaBlock: React.FC<PropType> = ({ id, name, price, imageUrl, sizes, type
 		return 0;
 	});
 	const onAddToCart = () => {
-		const pizzaObj = { id, name, price, imageUrl, size: activeSize, type: activeType, count: 0 };
+		const pizzaObj = { id, name, price, imageUrl, size: activeSize, type: types[activeType], count: 0 };
 		dispatch(addItem(pizzaObj));
 	};
 
