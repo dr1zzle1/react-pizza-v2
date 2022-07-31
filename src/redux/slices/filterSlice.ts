@@ -1,4 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { SortItemType } from '../../components/Sort';
+
+interface IFilterState{
+  activeCategory: number;
+  sortProperty: SortItemType;
+  searchText: string;
+  activePage: number;
+}
 
 export const filterSlice = createSlice({
   name: 'filter',
@@ -10,21 +18,21 @@ export const filterSlice = createSlice({
     },
     searchText: '',
     activePage: 1,
-  },
+  } as IFilterState,
   reducers: {
-    setCategory(state, action) {
+    setCategory(state, action:PayloadAction<number>) {
       state.activeCategory = action.payload;
     },
-    setSearchText(state, action) {
+    setSearchText(state, action:PayloadAction<string>) {
       state.searchText = action.payload;
     },
-    setSortProperty(state, action) {
+    setSortProperty(state, action:PayloadAction<SortItemType>) {
       state.sortProperty = action.payload;
     },
-    setActivePage(state, action) {
+    setActivePage(state, action:PayloadAction<number>) {
       state.activePage = action.payload;
     },
-    setFilters(state, action) {
+    setFilters(state, action:PayloadAction<{activeCategory:number,sortProperty:SortItemType,activePage:number}>) {
       state.activeCategory = Number(action.payload.activeCategory);
       state.sortProperty = action.payload.sortProperty;
       state.activePage = action.payload.activePage;
