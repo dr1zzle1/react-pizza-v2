@@ -1,11 +1,20 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import Logo from '../assets/img/pizza-logo.svg';
 import Search from './Search/Search';
 import { useTypedSelector } from '../hooks/useTypedSelector';
 
 const Header: React.FC = () => {
 	const { items, totalPrice } = useTypedSelector((state) => state.cart);
+	const isMounted = useRef(false)
+	useEffect(() => {
+		if (isMounted.current) {
+			localStorage.setItem('cart', JSON.stringify(items))
+		}
+		isMounted.current = true
+	}, [items])
+
+	const location = useLocation()
 	return (
 		<div className="header">
 			<div className="container">
@@ -16,7 +25,7 @@ const Header: React.FC = () => {
 						<p>самая вкусная пицца во вселенной</p>
 					</div>
 				</Link>
-				<Search />
+				{location.pathname !== '/cart' && <Search />}
 				<div className="header__cart">
 					<Link to="/cart" className="button button--cart">
 						<span>{totalPrice} ₽</span>

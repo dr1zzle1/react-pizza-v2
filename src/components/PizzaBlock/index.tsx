@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { addItem } from '../../redux/slices/cartSlice';
+import { ICartItem } from '../../types';
 
 export const typeName = ['тонкое', 'традиционное'];
 
@@ -18,10 +19,9 @@ const PizzaBlock: React.FC<PropType> = ({ id, name, price, imageUrl, sizes, type
 	const dispatch = useTypedDispatch();
 	const [activeSize, setActiveSize] = useState(sizes[0]);
 	const [activeType, setActiveType] = useState(0);
-	console.log(types);
 	const { items } = useTypedSelector((state) => state.cart);
 	let addedCount = 0;
-	items.map((el: any) => {
+	items.map((el: ICartItem) => {
 		if (el.id === id) {
 			addedCount += el.count;
 		}

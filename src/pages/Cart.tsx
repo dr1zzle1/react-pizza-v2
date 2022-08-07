@@ -9,7 +9,7 @@ import { useTypedDispatch } from '../hooks/useTypedDispatch';
 
 
 const Cart: React.FC = () => {
-	const { items, totalPrice } = useTypedSelector((state: any) => state.cart);
+	const { items, totalPrice } = useTypedSelector((state) => state.cart);
 	const dispatch = useTypedDispatch();
 
 	const totalCount = items.reduce((sum: number, el: ICartItem) => el.count + sum, 0);

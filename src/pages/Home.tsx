@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { fetchPizzas } from '../redux/slices/pizzaSlice';
 import { useTypedSelector } from '../hooks/useTypedSelector';
 import { useTypedDispatch } from '../hooks/useTypedDispatch';
+import { IPizza } from '../types';
 
 const Home: React.FC = () => {
 	const dispatch = useTypedDispatch();
@@ -29,16 +30,14 @@ const Home: React.FC = () => {
 
 	const category = activeCategory ? `&category=${activeCategory}` : '';
 	const sort = `sortBy=${sortProperty.sort}`;
-
 	const filteredPizzas = items
-		.filter((pizza: any) => pizza.name.toLowerCase().includes(searchText.toLowerCase()))
-		.map((pizza: any) => <PizzaBlock key={pizza.id} {...pizza} />);
+		.filter((pizza: IPizza) => pizza.name.toLowerCase().includes(searchText.toLowerCase()))
+		.map((pizza: IPizza) => <PizzaBlock key={pizza.id} {...pizza} />);
 
 	useEffect(() => {
 		if (window.location.search) {
 			const query = qs.parse(window.location.search.slice(1));
 			const sort = sortList.find((obj) => obj.sort === query.sortProperty);
-			console.log(query);
 			dispatch(setFilters({ activeCategory: Number(query.activeCategory), activePage: Number(query.activePage), sortProperty: sort || sortList[0] }));
 			isSearch.current = true;
 		}
